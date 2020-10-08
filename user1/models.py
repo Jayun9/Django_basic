@@ -4,6 +4,7 @@ from django.db import models
 
 
 class User1(models.Model):
+    objects = models.Manager()
     username = models.CharField(max_length=32,
                                 verbose_name='사용자명')
     useremail = models.EmailField(max_length=128,
@@ -21,3 +22,4 @@ class User1(models.Model):
         db_table = 'basic_user1'
         verbose_name = "패스트 캠퍼스 사용자"
         verbose_name_plural = '패스트 캠퍼스 사용자'
+    
