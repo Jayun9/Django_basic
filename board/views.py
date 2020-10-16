@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from user1.models import User1
 from .models import Board
 from .forms import BoardForm
+from tag.models import Tag
 
 def board_details(request,pk):
     try:
@@ -20,11 +21,20 @@ def board_write(request):
         if form.is_valid():
             user_id = request.session.get('user')
             user1 = User1.objects.get(pk=user_id)
+
+            tags = form.cleaned_data['tags'].split(',')
+
             board = Board()
             board.title = form.cleaned_data['title']
             board.contents = form.cleaned_data['contents']
             board.writer = user1 
             board.save()
+
+            for tag in tags:
+                if not tag:
+                    continue
+                _tag, _ = Tag.objects.get_or_create(name=tag)
+                board.tags.add(_tag)
 
             return redirect('/board/list/')
     form = BoardForm()
